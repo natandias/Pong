@@ -22,7 +22,8 @@ public class Pong extends Applet implements Runnable {
     int PosicaoHorizontal = 0, PosicaoVertical = 0;
     int Score1 = 0, Score2 = 0;
     int Seq1 = 0, Seq2 = 0;
-    int Speed = 20;
+    int Speed = 20; 
+    boolean SpeedAltered = false;
     Thread runner;
     Graphics goff, g;
     Image Imagem;
@@ -89,7 +90,7 @@ public class Pong extends Applet implements Runnable {
             }
             // Se Bater na Borda Direita
             if (PosicaoHorizontal > getSize().width - 10) {
-                Score1++;
+                Score1++; Seq1++; Seq2 = 0; SpeedAltered = false;
                 return 3;
             }
             // Se Bater no Cursor Direito
@@ -111,7 +112,7 @@ public class Pong extends Applet implements Runnable {
             }
             // Se Bater na Borda Esquerda
             if (PosicaoHorizontal < 1) {
-                Score2++;
+                Score2++; Seq2++; Seq1 = 0; SpeedAltered = false;
                 return 1;
             }
             // Se Bater no Cursor Esquerdo
@@ -119,6 +120,11 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorEsquerdo + 31
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) {       
                 return 1;
+            }
+            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && Speed >= 8){
+            Speed = Speed - 3;
+            SpeedAltered = true;
+            System.out.printf("\nvelocidade: %d", Speed);
             }
             repeat(Speed);
         }
@@ -133,7 +139,7 @@ public class Pong extends Applet implements Runnable {
             }
             // Se Bater na Borda Direita
             if (PosicaoHorizontal > getSize().width - 10) {
-                Score1++; Seq1++; Seq2 = 0;
+                Score1++; Seq1++; Seq2 = 0; SpeedAltered = false;   
                 return 4;
             }
             // Se Bater no Cursor Direito
@@ -149,7 +155,6 @@ public class Pong extends Applet implements Runnable {
     // Move Bola da Direita para Diagonal Esquerda Superior
     public int MoveBolaDES() {
         for (;; PosicaoVertical -= 2, PosicaoHorizontal -= 2) {
-            System.out.println(Seq1);
             // Se Bater na Borda Superior
             if (PosicaoVertical < 1) {
                 return 3;
