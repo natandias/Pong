@@ -10,7 +10,10 @@ import java.awt.event.MouseEvent;
 //aumentar velocidade padrão dos batedores -> feito
 //aumento da velocidade da bola a cada 5 pontos feitos no jogo -> feito
 //controles alterados para w,s, UP, DOWN -> feito
-//fazer tela inicial -> pronto
+//fazer tela inicial -> feito
+//modo de jogo: lento, medio, rapido -> feito
+//tela de game over
+
 //aumento do cursor por um tempo se fizer 5 pontos seguidos -> quase
 
 public class Pong extends Applet implements Runnable {
@@ -21,29 +24,82 @@ public class Pong extends Applet implements Runnable {
     int PosicaoHorizontal = 0, PosicaoVertical = 70;
     int Score1 = 0, Score2 = 0, ScoreTotal = 0, VantagemP1 = 0, VantagemP2 = 0;
     int SleepTime = 18;
-    boolean SpeedAltered = true;
+    boolean SpeedAltered = true, initialSpeedSet = false;
     Thread runner;
     Graphics goff, g;
     Image Imagem, startImage;
     Dimension Dimensao;
     
+    
     @Override
     public void init() 
     {
-        setBackground(Color.blue);
+        setBackground(Color.black);
         setFont(new Font("Ubuntu", Font.BOLD, 15));
     }
     
+    //Desenha tela inicial
     @Override
     public void paint(Graphics g) 
     { 
-        // set Color for rectangle 
         g.setColor(Color.white); 
   
-        // draw a ellipse 
-        g.drawString("PONG", 145, 70);
-        g.drawString("PRESSIONE 'I' PARA INICIAR", 70, 100);
+        g.drawString("PONG", 145, 40);
+        g.drawString("VELOCIDADE: ", 120, 70);
+        g.drawString("1. LENTO", 130, 90);
+        g.drawString("2. MÉDIO", 130, 110);
+        g.drawString("3. RÁPIDO", 130, 130);
+        g.drawString("PRESSIONE 'I' PARA INICIAR", 75, 160);
+        
     } 
+    
+    public void defSpeed(int ST) {
+        if (ST == 1) {
+            SleepTime = 25;
+            g.setColor(Color.green);
+            g.drawString("1. LENTO", 130, 90);
+            g.setColor(Color.white);
+            g.drawString("2. MÉDIO", 130, 110);
+            g.drawString("3. RÁPIDO", 130, 130);
+        } else if (ST == 2) {
+            SleepTime = 20;
+            g.setColor(Color.green);
+            g.drawString("2. MÉDIO", 130, 110);
+            g.setColor(Color.white);
+            g.drawString("1. LENTO", 130, 90);
+            g.drawString("3. RÁPIDO", 130, 130);
+        } else if (ST == 3) {
+            SleepTime = 10;
+            g.setColor(Color.green);
+            g.drawString("3. RÁPIDO", 130, 130);
+            g.setColor(Color.white);
+            g.drawString("1. LENTO", 130, 90);
+            g.drawString("2. MÉDIO", 130, 110);          
+        }
+    }
+    
+    public void finalScore(){
+        setBackground(Color.black);
+        g.setColor(Color.white);
+        g.drawString("PLACAR FINAL", 120, 80);
+        g.setColor(Color.green);
+        g.drawString("PLAYER 1: " + Score1, 20, 120);
+        g.setColor(Color.red);
+        g.drawString("PLAYER 2: " + Score2, 240, 120);
+        if (Score1 > Score2) {
+            g.setColor(Color.green);
+            g.drawString("PLAYER 1 FOI O VENCEDOR", 75, 150);      
+        }else if (Score2 > Score1){
+            g.setColor(Color.red);
+            g.drawString("PLAYER 2 FOI O VENCEDOR", 75, 150);    
+        }
+        else {
+            g.setColor(Color.white);
+            g.drawString("EMPATE", 140, 150); 
+        }
+    }
+    
+    
     @Override
     public void start()       
     {   
@@ -62,11 +118,13 @@ public class Pong extends Applet implements Runnable {
     @Override
     public void stop() 
     {
+        
         if (runner != null) 
         {
             runner.interrupt();
             runner = null;
         }
+        
     }
 
     @Override
@@ -330,7 +388,26 @@ public class Pong extends Applet implements Runnable {
         if (key == Event.UP) {
             MoveDireita = -5;
         }
+        if (key == Event.ESCAPE){
+            finalScore();
+            runner.stop();   
+        }
+        
+        if (initialSpeedSet == false)
+        {
+            if (key == '1') {
+            defSpeed(1); 
+            }      
+            if (key == '2') {
+            defSpeed(2);
+            }     
+            if (key == '3') {
+            defSpeed(3);
+            }      
+        }
+            
         if (key == 'i' || key == 'I') {
+            initialSpeedSet = true;
             runner.start();
         }
         return true;
