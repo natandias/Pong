@@ -2,7 +2,6 @@ package pong;
 
 import java.applet.Applet;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
 //para implementar:
 //pontos são feitos somente ao bater nas bordas -> feito
@@ -12,7 +11,7 @@ import java.awt.event.MouseEvent;
 //controles alterados para w,s, UP, DOWN -> feito
 //fazer tela inicial -> feito
 //modo de jogo: lento, medio, rapido -> feito
-//tela de game over
+//tela de game over -> feito
 
 //aumento do cursor por um tempo se fizer 5 pontos seguidos -> quase
 
