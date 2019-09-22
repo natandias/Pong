@@ -399,10 +399,11 @@ public class Pong extends Applet implements Runnable {
         if (key == Event.UP) {
             MoveDireita = -5;
         }
-        if (key == Event.ESCAPE){
-            finalScore();
+        if (key == Event.ESCAPE){  
             ingame = false;
-            runner.suspend();   
+            runner.suspend();
+            pause(500);
+            finalScore();  
         }  
         if (key == 'i' || key == 'I') {
             initialSpeedSet = true;
