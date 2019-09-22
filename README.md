@@ -14,4 +14,5 @@ O código fornecido para elaboração da atividade contava apenas com as funçõ
 - [x] Adição de tela inicial
 - [x] Adição de seleção da velocidade inicial da bola: lento, médio, rápido
 - [x] Adição de tela de game over
-- [ ] Aumento do cursor por um tempo se fizer 5 pontos seguidos -> em progresso
+- [x] Aumento do cursor do jogador que mantiver uma diferença de 5 ou 6 pontos
+- [x] Adição de função de reinício de jogo
