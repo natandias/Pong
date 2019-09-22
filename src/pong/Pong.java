@@ -9,11 +9,10 @@ import java.awt.*;
 //aumentar velocidade padrão dos batedores -> feito
 //aumento da velocidade da bola a cada 5 pontos feitos no jogo -> feito
 //controles alterados para w,s, UP, DOWN -> feito
-//fazer tela inicial -> feito
 //modo de jogo: lento, medio, rapido -> feito
 //tela de game over -> feito
-
-//aumento do cursor por um tempo se fizer 5 pontos seguidos -> quase
+//reinicio de jogo -> feito
+//aumento do cursor do jogador que mantiver uma diferença de 5 ou 6 pts -> quase
 
 public class Pong extends Applet implements Runnable {
     
@@ -23,7 +22,7 @@ public class Pong extends Applet implements Runnable {
     int PosicaoHorizontal = 0, PosicaoVertical = 70;
     int Score1 = 0, Score2 = 0, ScoreTotal = 0, VantagemP1 = 0, VantagemP2 = 0;
     int SleepTime = 18;
-    boolean SpeedAltered = true, initialSpeedSet = false;
+    boolean SpeedAltered = true, initialSpeedSet = false, ingame = false;
     Thread runner;
     Graphics goff, g;
     Image Imagem, startImage;
@@ -68,7 +67,7 @@ public class Pong extends Applet implements Runnable {
             g.drawString("1. LENTO", 130, 90);
             g.drawString("3. RÁPIDO", 130, 130);
         } else if (ST == 3) {
-            SleepTime = 10;
+            SleepTime = 15;
             g.setColor(Color.green);
             g.drawString("3. RÁPIDO", 130, 130);
             g.setColor(Color.white);
@@ -81,10 +80,12 @@ public class Pong extends Applet implements Runnable {
         setBackground(Color.black);
         g.setColor(Color.white);
         g.drawString("PLACAR FINAL", 120, 80);
+        g.drawString("TECLE R PARA REINICIAR", 85, 170);
         g.setColor(Color.green);
         g.drawString("PLAYER 1: " + Score1, 20, 120);
         g.setColor(Color.red);
         g.drawString("PLAYER 2: " + Score2, 240, 120);
+        
         if (Score1 > Score2) {
             g.setColor(Color.green);
             g.drawString("PLAYER 1 FOI O VENCEDOR", 75, 150);      
@@ -97,7 +98,19 @@ public class Pong extends Applet implements Runnable {
             g.drawString("EMPATE", 140, 150); 
         }
     }
-    
+    public void restart(){
+        CursorDireito = 100; CursorEsquerdo = 100;
+        comprCursorE = 30; comprCursorD = 30;
+        MoveDireita = 0; MoveEsquerda = 0;
+        PosicaoHorizontal = 0; PosicaoVertical = 70;
+        Score1 = 0; Score2 = 0; ScoreTotal = 0; VantagemP1 = 0; VantagemP2 = 0;
+        update(g, comprCursorE, comprCursorD); 
+        SleepTime = 18;
+        SpeedAltered = true; initialSpeedSet = true; 
+        pause(1000);    
+        ingame = true;
+        runner.resume();
+    }
     
     @Override
     public void start()       
@@ -116,8 +129,7 @@ public class Pong extends Applet implements Runnable {
 
     @Override
     public void stop() 
-    {
-        
+    {   
         if (runner != null) 
         {
             runner.interrupt();
@@ -160,7 +172,7 @@ public class Pong extends Applet implements Runnable {
             if (PosicaoVertical > getSize().height - 10) 
             {
                return 2;
-             }  
+            }  
             // Se Bater na Borda Direita
             if (PosicaoHorizontal > getSize().width - 10) {
                 Score1++; ScoreTotal++;
@@ -168,31 +180,31 @@ public class Pong extends Applet implements Runnable {
                 return 3;
             }
             
-            VantagemP1 = Score1 - Score2;
+            VantagemP1 = Score1 - Score2; // consertar negativo
             //Aumenta cursor se algum dos jogadores possuir uma vantagem de 5 pontos         
-            if (VantagemP1 >= 8 || VantagemP1 <= 4)
+            if (VantagemP1 >= 7 || VantagemP1 <= 4)
             {   
                 // Se Bater no Cursor Direito
                 if (PosicaoVertical > CursorDireito - 10
-                    && PosicaoVertical < CursorDireito + 31
+                    && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {                     
-                    comprCursorE = 30;         
+                    comprCursorE = 30;      
                     return 3;
                 }
             }
-            else if (VantagemP1 > 4 && VantagemP1 < 8 ) 
+            else if (VantagemP1 > 4 && VantagemP1 < 7) 
             {
                 // Se Bater no Cursor Direito
-                if (PosicaoVertical > CursorDireito - 8
-                    && PosicaoVertical < CursorDireito + 70
+                if (PosicaoVertical > CursorDireito - 10
+                    && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {      
-                    comprCursorE = 48;
+                    comprCursorE = 40;
                     return 3;
                 }   
             }   
-            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 8) {
+            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 10) {
                 SleepTime = SleepTime - 3;
                 SpeedAltered = true;
             }
@@ -217,28 +229,28 @@ public class Pong extends Applet implements Runnable {
             
             VantagemP2 = Score2 - Score1;
             //Aumenta cursor se algum dos jogadores possuir uma vantagem de 5 pontos
-            if (VantagemP2 >= 8 || VantagemP2 <= 4)
+            if (VantagemP2 >= 7 || VantagemP2 <= 4)
             {
                 // Se Bater no Cursor Esquerdo
                 if (PosicaoVertical > CursorEsquerdo - 10
-                    && PosicaoVertical < CursorEsquerdo + 31
+                    && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 {
                     comprCursorD = 30;
                     return 1;
                 }
             }              
-            else if (VantagemP2 > 4 && VantagemP2 < 8)
+            else if (VantagemP2 > 4 && VantagemP2 < 7)
             { 
-                if (PosicaoVertical > CursorEsquerdo - 8
-                    && PosicaoVertical < CursorEsquerdo + 70
+                if (PosicaoVertical > CursorEsquerdo - 10
+                    && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 { 
-                    comprCursorD = 48;
+                    comprCursorD = 40;
                     return 1;
                 }
             }
-            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 8) {
+            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 10) {
                 SleepTime = SleepTime - 3;
                 SpeedAltered = true;
             }
@@ -262,29 +274,29 @@ public class Pong extends Applet implements Runnable {
             
             VantagemP1 = Score1 - Score2;
             //Aumenta cursor se algum dos jogadores possuir uma vantagem de 5 pontos
-            if (VantagemP1 >= 8 || VantagemP1 <= 4)
+            if (VantagemP1 >= 7 || VantagemP1 <= 4)
             {   
                 // Se Bater no Cursor Direito
                 if (PosicaoVertical > CursorDireito - 10
-                    && PosicaoVertical < CursorDireito + 31
+                    && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {                     
                     comprCursorE = 30;         
                     return 4;
                 }
             }
-            else if (VantagemP1 > 4 && VantagemP1 < 8 ) 
+            else if (VantagemP1 > 4 && VantagemP1 < 7) 
             {
                 // Se Bater no Cursor Direito
-                if (PosicaoVertical > CursorDireito - 8
-                    && PosicaoVertical < CursorDireito + 70
+                if (PosicaoVertical > CursorDireito - 10
+                    && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {      
-                    comprCursorE = 48;
+                    comprCursorE = 40;
                     return 4;
                 }    
             }
-            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 8) {
+            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 10) {
                 SleepTime = SleepTime - 3;
                 SpeedAltered = true;
             }
@@ -309,29 +321,29 @@ public class Pong extends Applet implements Runnable {
             
             VantagemP2 = Score2 - Score1;
             //Aumenta cursor se algum dos jogadores possuir uma vantagem de 5 pontos
-            if (VantagemP2 >= 8 || VantagemP2 <= 4)
+            if (VantagemP2 >= 7 || VantagemP2 <= 4)
             {
                // Se Bater no Cursor Esquerdo 
                 if (PosicaoVertical > CursorEsquerdo - 10
-                    && PosicaoVertical < CursorEsquerdo + 31
+                    && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 {  
                     comprCursorD = 30;
                     return 2;
                 }
             }
-            if (VantagemP2 > 4 || VantagemP2 < 8)
+            if (VantagemP2 > 4 || VantagemP2 < 7)
             {    
                 // Se Bater no Cursor Esquerdo 
-                if(PosicaoVertical > CursorEsquerdo - 8
-                    && PosicaoVertical < CursorEsquerdo + 70
+                if(PosicaoVertical > CursorEsquerdo - 10
+                    && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 {
-                    comprCursorD = 48;
+                    comprCursorD = 40;
                     return 2;
                 }
             }
-            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 8) 
+            if ((Score1 + Score2) % 5 == 0 && SpeedAltered == false && SleepTime >= 10) 
             {
                 SleepTime = SleepTime - 3;
                 SpeedAltered = true;
@@ -389,7 +401,16 @@ public class Pong extends Applet implements Runnable {
         }
         if (key == Event.ESCAPE){
             finalScore();
-            runner.stop();   
+            ingame = false;
+            runner.suspend();   
+        }  
+        if (key == 'i' || key == 'I') {
+            initialSpeedSet = true;
+            ingame = true;
+            runner.start();
+        }  
+        if ((key == 'r' || key == 'R') && ingame == false) {
+            restart();
         }
         
         if (initialSpeedSet == false)
@@ -405,10 +426,7 @@ public class Pong extends Applet implements Runnable {
             }      
         }
             
-        if (key == 'i' || key == 'I') {
-            initialSpeedSet = true;
-            runner.start();
-        }
+        
         return true;
     }
 
