@@ -99,11 +99,11 @@ public class Pong extends Applet implements Runnable {
         }
     }
     public void restart(){
+        Score1 = 0; Score2 = 0; ScoreTotal = 0; VantagemP1 = 0; VantagemP2 = 0;
         CursorDireito = 100; CursorEsquerdo = 100;
         comprCursorE = 30; comprCursorD = 30;
         MoveDireita = 0; MoveEsquerda = 0;
-        PosicaoHorizontal = 0; PosicaoVertical = 70;
-        Score1 = 0; Score2 = 0; ScoreTotal = 0; VantagemP1 = 0; VantagemP2 = 0;
+        PosicaoHorizontal = 0; PosicaoVertical = 70;  
         update(g, comprCursorE, comprCursorD); 
         SleepTime = 18;
         SpeedAltered = true; initialSpeedSet = true; 
@@ -189,7 +189,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {                     
-                    comprCursorE = 30;      
+                    comprCursorD = 30;      
                     return 3;
                 }
             }
@@ -200,7 +200,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {      
-                    comprCursorE = 40;
+                    comprCursorD = 50;
                     return 3;
                 }   
             }   
@@ -236,7 +236,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 {
-                    comprCursorD = 30;
+                    comprCursorE = 30;
                     return 1;
                 }
             }              
@@ -246,7 +246,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 { 
-                    comprCursorD = 40;
+                    comprCursorE = 50;
                     return 1;
                 }
             }
@@ -281,7 +281,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {                     
-                    comprCursorE = 30;         
+                    comprCursorD = 30;         
                     return 4;
                 }
             }
@@ -292,7 +292,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorDireito + comprCursorD
                     && PosicaoHorizontal > 239 && PosicaoHorizontal < 246) 
                 {      
-                    comprCursorE = 40;
+                    comprCursorD = 50;
                     return 4;
                 }    
             }
@@ -328,7 +328,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 {  
-                    comprCursorD = 30;
+                    comprCursorE = 30;
                     return 2;
                 }
             }
@@ -339,7 +339,7 @@ public class Pong extends Applet implements Runnable {
                     && PosicaoVertical < CursorEsquerdo + comprCursorE
                     && PosicaoHorizontal > 49 && PosicaoHorizontal < 56) 
                 {
-                    comprCursorD = 40;
+                    comprCursorE = 50;
                     return 2;
                 }
             }
