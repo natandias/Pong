@@ -27,7 +27,7 @@ public class Pong extends Applet implements Runnable {
     Graphics goff, g;
     Image Imagem, startImage;
     Dimension Dimensao;
-    
+    Color SteelBlue = new Color(70,130,180);
     
     @Override
     public void init() 
@@ -39,7 +39,11 @@ public class Pong extends Applet implements Runnable {
     //Desenha tela inicial
     @Override
     public void paint(Graphics g) 
-    { 
+    {   
+        //Color SteelBlue = new Color(70,130,180);
+        g.setColor(SteelBlue);
+        g.fillRect(0, 0, Dimensao.width, Dimensao.height);
+        
         g.setColor(Color.white); 
   
         g.drawString("PONG", 145, 40);
@@ -77,7 +81,9 @@ public class Pong extends Applet implements Runnable {
     }
     
     public void finalScore(){
-        setBackground(Color.black);
+        g.setColor(SteelBlue);
+        g.fillRect(0, 0, Dimensao.width, Dimensao.height);
+        
         g.setColor(Color.white);
         g.drawString("PLACAR FINAL", 120, 80);
         g.drawString("TECLE R PARA REINICIAR", 85, 170);
@@ -103,13 +109,13 @@ public class Pong extends Applet implements Runnable {
         CursorDireito = 100; CursorEsquerdo = 100;
         comprCursorE = 30; comprCursorD = 30;
         MoveDireita = 0; MoveEsquerda = 0;
-        PosicaoHorizontal = 0; PosicaoVertical = 70;  
+        PosicaoHorizontal = 150; PosicaoVertical = 100;  
         update(g, comprCursorE, comprCursorD); 
         SleepTime = 18;
         SpeedAltered = true; initialSpeedSet = true; 
         pause(1000);    
         ingame = true;
-        runner.resume();
+        runner.resume();      
     }
     
     @Override
@@ -401,8 +407,7 @@ public class Pong extends Applet implements Runnable {
         }
         if (key == Event.ESCAPE){  
             ingame = false;
-            runner.suspend();
-            pause(500);
+            runner.suspend();         
             finalScore();  
         }  
         if (key == 'i' || key == 'I') {
