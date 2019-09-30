@@ -410,7 +410,7 @@ public class Pong extends Applet implements Runnable {
             runner.suspend();         
             finalScore();  
         }  
-        if (key == 'i' || key == 'I') {
+        if ((key == 'i' || key == 'I') && ingame == false) {
             initialSpeedSet = true;
             ingame = true;
             runner.start();
